@@ -1,19 +1,22 @@
 
-var socket;
+
+// socket viene de antes
+// var socket = io();
+var radio = 50;
 
 function setup() {
-	console.log("Ya estoy dentro de sketch_p5.js");
 
 	createCanvas(200,200);
 	background(51);
 	fill(255, 10);
 	stroke(0, 10);
 
-//	socket = io.connect('localhost:3000)');
-	socket = io.connect('http://127.0.0.1:3000)', { 'forceNew': true });
-
-  	socket.on('this', function (data) {
-    	console.log("this: " + data);
+  	socket.on('mouse', function (data) {
+//    	console.log("mouse: " + data.x + ", "+ data.y);
+    	push();
+    	fill(0,200,200, 10);
+    	ellipse(data.x, data.y, radio,radio);
+    	pop();
   	});
 }
 
@@ -22,18 +25,21 @@ function draw() {
 
 }
 
-function mouseDragged() {
-	if(mouseX>=0 && mouseX<width && mouseY>=0 && mouseY<height) {
+function send_draw() {
+
 		var dataMouse = {
-			x: mouseX,
-			y: mouseY
+			id: socket.id,
+			x : mouseX,
+			y : mouseY
 		};
+		socket.emit('mouse', dataMouse);
 
-		console.log("Sending mouseData: " + dataMouse.x + ", "+dataMouse.y);
-
-		socket.emit('mouseData', dataMouse);
-
-		ellipse(mouseX, mouseY, 60,60);
-	}
+    	ellipse(dataMouse.x, dataMouse.y, radio,radio);
 }
 
+function mousePressed() {
+	send_draw();
+}
+function mouseDragged() {
+	send_draw();
+}

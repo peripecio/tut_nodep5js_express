@@ -14,18 +14,18 @@
 var express = require('express');
 var app = express();
 
+//var server = app.listen(3000);
+//app.use(express.static('public'));
 var server = app.listen(3000);
 app.use(express.static('public'));
+
 
 var socket = require('socket.io');
 var io = socket(server);
 
 
 // controlar eventos de socket:
-io.on('connection', newConnection);
-//io.on('connection', newConnection);
-
-function newConnection(socket) {
+io.on('connection', function (socket) {
 
   // socket.on('mouse', mouseMsg);
   // function mouseMsg(data) {
@@ -60,9 +60,9 @@ function newConnection(socket) {
 
   console.log("New connection xx: "+ socket.id);
  
-}
+});
 
-console.log("ok server en 8080");
+console.log("ok server en 3000");
 
 
 /*
